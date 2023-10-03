@@ -18,13 +18,19 @@ export const useToDoListStore = defineStore('toDoList', {
         },
 
         addTodoList(title: string) {
-            let list  = new ToDoList(this.id++, title, [] as ToDo[])
+            let randomId = Math.floor(Math.random() * 1000000)
+            let list  = new ToDoList(randomId, title, [] as ToDo[])
             this.toDoList.push(list);
+            return this.toDoList;
+        },
+        setToDoList(toDoList: ToDoList[]){
+            if (toDoList){
+                this.toDoList = toDoList
+            }
         },
 
-        deleteToDoListById(id: number): ToDoList[]{
+        deleteToDoListById(id: number){
             this.toDoList = this.toDoList.filter(tdl => tdl.id !== id);
-            return this.toDoList;
         }
     },
 })

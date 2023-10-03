@@ -1,22 +1,42 @@
 <script setup lang="ts">
-import {useToDoListStore} from "@/stores/toDoList";
-import {ref} from "vue";
-import {RouterLink} from "vue-router";
+import { useToDoListStore } from "@/stores/toDoList";
+import { onBeforeMount, reactive, ref } from "vue";
+import { RouterLink } from "vue-router";
+import { ToDoList } from "@/classes/ToDoList";
 
 const toDoListStore = useToDoListStore();
-const toDoList = toDoListStore.getToDoList;
 
-let isShow = ref(false);
-let title = ref('');
-let listToDoList = ref(toDoList)
+let isShow = ref(false)
+let title = ref('')
+
+onBeforeMount(()=>{
+  if (localStorage.getItem('todolist')) {
+    try {
+      const stringifyToDoList = JSON.parse(localStorage.getItem('todolist') || '{}')
+      toDoListStore.setToDoList(stringifyToDoList)
+    } catch(e) {
+      localStorage.removeItem('todolist');
+    }
+  }
+})
+
 const addNewToDoList = (text: string) => {
-  toDoListStore.addTodoList(text);
-
+  const newToDoList = toDoListStore.addTodoList(text);
   title.value = '';
+  const parsedToDoList = JSON.stringify(newToDoList)
+  localStorage.setItem('todolist', parsedToDoList);
 }
+
 const deleteToDoList = (id: number) =>{
-  listToDoList.value = toDoListStore.deleteToDoListById(id)
+  toDoListStore.toDoList.forEach((list: ToDoList, index: number) => {
+    if(list._id === id){
+      toDoListStore.toDoList.splice(index, 1)
+      console.log(toDoListStore.toDoList, index)
+      localStorage.setItem('todolist', JSON.stringify(toDoListStore.toDoList));
+    }
+  })
 }
+
 </script>
 
 <template>
@@ -29,9 +49,9 @@ const deleteToDoList = (id: number) =>{
       <button @click="isShow = false" v-show="isShow"> x </button>
     </div>
     <ol>
-      <li v-for="item in listToDoList" :key="item.id">{{ item._title }}
-        <RouterLink :to="{ name:'todolist' , params: { id: item.id }}">go to todolist</RouterLink>
-        <button @click="deleteToDoList(item.id)">Supprimer</button>
+      <li v-for="item in toDoListStore.toDoList" :key="item._id">{{ item._title }}
+        <RouterLink :to="{ name:'todolist' , params: { id: item._id }}">go to todolist</RouterLink>
+        <button @click="deleteToDoList(item._id)">Supprimer</button>
       </li>
     </ol>
   </div>
