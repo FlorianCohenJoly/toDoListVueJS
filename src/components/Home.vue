@@ -21,12 +21,12 @@ const deleteToDoList = (id: number) =>{
 
 <template>
   <div class="greetings">
-    <h1 class="green">To Do List Home</h1>
+    <h1 class="green">ToDolists</h1>
     <div>
-      <button @click="isShow = true" v-show="!isShow"> + </button>
-      <input placeholder="Veuillez entrer un nom de toDoList" v-model="title" v-show="isShow" />
-      <button @click="addNewToDoList(title)" v-show="isShow"> ajouter </button>
-      <button @click="isShow = false" v-show="isShow"> x </button>
+      <button class="add-new-list" @click="isShow = true" v-show="!isShow"> Créer une nouvelle liste </button>
+      <input class="name-list-input" placeholder="Veuillez entrer un nom de toDoList" v-model="title" v-show="isShow" />
+      <button class="confirm-add-list" @click="addNewToDoList(title)" v-show="isShow"> ajouter </button>
+      <button class="" @click="isShow = false" v-show="isShow"> x </button>
     </div>
     <ol>
       <li v-for="item in listToDoList" :key="item.id">{{ item._title }}
@@ -42,8 +42,6 @@ const deleteToDoList = (id: number) =>{
   h1 {
     font-weight: 500;
     font-size: 2.6rem;
-    position: relative;
-    top: -10px;
   }
   h3 {
     font-size: 1.2rem;
@@ -51,14 +49,14 @@ const deleteToDoList = (id: number) =>{
   li {
     color: #181818;
   }
-  .greetings h1,
-  .greetings h3 {
-    text-align: center;
+  .add-new-list {
+    border-radius: 5px;
+    border: none;
+    margin: 4px;
   }
-  @media (min-width: 1024px) {
-    .greetings h1,
-    .greetings h3 {
-      text-align: left;
-    }
+  .name-list-input {
+    border-radius: 2px;
+    border: none;
+    padding: 4px;
   }
   </style>
