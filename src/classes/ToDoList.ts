@@ -1,12 +1,22 @@
 import {ToDo} from "@/classes/ToDo";
 
 export class ToDoList{
+    _id: number
     _title: string
     _toDo: ToDo[]
 
-    constructor(title: string, toDo: ToDo[]) {
+    constructor(id:number, title: string, toDo: ToDo[]) {
+        this._id = id
         this._title = title
         this._toDo = toDo
+    }
+
+    get id(): number{
+        return this._id
+    }
+
+    set id(id: number){
+        this._id = id
     }
 
     get toDo(): ToDo[] {
@@ -24,4 +34,5 @@ export class ToDoList{
     set title(value: string) {
         this._title = value;
     }
+
 }
